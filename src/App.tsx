@@ -3,7 +3,7 @@ import './App.css';
 function App() {
   return (
     <>
-      <h1>Buscador de bebidas</h1>
+      <h1 className='text-6xl'>Buscador de bebidas</h1>
     </>
   );
 }
