@@ -1,10 +1,18 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useAppStore } from '../stores/useAppStore';
 
 export default function Header() {
   const { pathname } = useLocation();
 
   const isHome = useMemo(() => pathname === '/', [pathname]);
+
+  const fetchCategories = useAppStore((state) => state.fetchCategories);
+  const categories = useAppStore((state) => state.categories);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const isActive = ({ isActive }: { isActive: boolean }) =>
     isActive
@@ -60,6 +68,14 @@ export default function Header() {
                 className='p-3 w-full rounded-lg focus:outline-none'
               >
                 <option value=''>-- Seleccione --</option>
+                {categories.drinks.map((category) => (
+                  <option
+                    key={category.strCategory}
+                    value={category.strCategory}
+                  >
+                    {category.strCategory}
+                  </option>
+                ))}
               </select>
             </div>
             <input
