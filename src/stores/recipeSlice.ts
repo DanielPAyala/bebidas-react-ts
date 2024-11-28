@@ -16,15 +16,18 @@ export type RecipesSliceType = {
   categories: CategoriesType;
   drinks: DrinksType;
   selectedRecipe: RecipeType;
+  modal: boolean;
   fetchCategories: () => Promise<void>;
   searchRecipes: (SearchFilters: SearchFilter) => Promise<void>;
   selectRecipe: (id: DrinkType['idDrink']) => Promise<void>;
+  closeModal: () => void;
 };
 
 export const createRecipesSlice: StateCreator<RecipesSliceType> = (set) => ({
   categories: { drinks: [] },
   drinks: { drinks: [] },
   selectedRecipe: {} as RecipeType,
+  modal: false,
   fetchCategories: async () => {
     const categories = await getCategories();
     set({ categories });
@@ -35,6 +38,12 @@ export const createRecipesSlice: StateCreator<RecipesSliceType> = (set) => ({
   },
   selectRecipe: async (id) => {
     const recipe = await getRecipeById(id);
-    set({ selectedRecipe: recipe });
+    set({ selectedRecipe: recipe, modal: true });
+  },
+  closeModal: () => {
+    set({ modal: false });
+    setTimeout(() => {
+      set({ selectedRecipe: {} as RecipeType });
+    }, 300);
   },
 });
