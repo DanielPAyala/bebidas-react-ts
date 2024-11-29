@@ -27,7 +27,7 @@ export const createFavoritesSlice: StateCreator<
         favorites: [...state.favorites, recipe],
       }));
     }
-    get().closeModal();
+    // get().closeModal();
   },
   favoriteExists: (id) => get().favorites.some((fav) => fav.idDrink === id),
 });

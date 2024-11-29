@@ -5,7 +5,7 @@ import {
   Transition,
   TransitionChild,
 } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useAppStore } from '../stores/useAppStore';
 import { RecipeType } from '../types';
 
@@ -15,6 +15,10 @@ export default function Modal() {
   const selectedRecipe = useAppStore((state) => state.selectedRecipe);
   const handleClickFavorite = useAppStore((state) => state.handleClickFavorite);
   const favoriteExists = useAppStore((state) => state.favoriteExists);
+
+  const [isFavorite, setIsFavorite] = useState(
+    favoriteExists(selectedRecipe.idDrink)
+  );
 
   const renderIngredients = () => {
     const ingredients: JSX.Element[] = [];
@@ -31,6 +35,10 @@ export default function Modal() {
     }
     return ingredients;
   };
+
+  useEffect(() => {
+    setIsFavorite(favoriteExists(selectedRecipe.idDrink));
+  }, [selectedRecipe.idDrink, favoriteExists]);
 
   return (
     <>
@@ -96,9 +104,12 @@ export default function Modal() {
                     <button
                       type='button'
                       className='w-full rounded bg-orange-600  p-3 font-bold uppercase text-white shadow hover:bg-orange-500'
-                      onClick={() => handleClickFavorite(selectedRecipe)}
+                      onClick={() => {
+                        handleClickFavorite(selectedRecipe);
+                        setIsFavorite(favoriteExists(selectedRecipe.idDrink));
+                      }}
                     >
-                      {favoriteExists(selectedRecipe.idDrink)
+                      {isFavorite
                         ? 'Quitar de favoritos'
                         : 'Agregar a favoritos'}
                     </button>
